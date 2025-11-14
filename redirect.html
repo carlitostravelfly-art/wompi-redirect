@@ -5,43 +5,45 @@
     <title>Redirigiendo…</title>
 </head>
 <body>
-
 <script>
-    // Leer parámetros de la URL
-    const params = new URLSearchParams(window.location.search);
+    // Extrae parámetros enviados por Wompi
+    const urlParams = new URLSearchParams(window.location.search);
 
-    // Wompi envía diferentes nombres para el estado
     let status =
-        params.get("status") ||
-        params.get("transactionStatus") ||
-        params.get("transaction_status") ||
+        urlParams.get("status") ||
+        urlParams.get("transactionStatus") ||
+        urlParams.get("transaction_status") ||
         "";
 
-    // 🔥 Si viene vacío → se toma como aprobado (iOS pasa vacío)
+    console.log("Status recibido:", status);
+
+    // ⭐ SI STATUS VIENE VACÍO → TRATAR COMO APROBADO
     if (!status || status.trim() === "") {
         status = "APPROVED";
+        console.log("Status vacío → asignado 'APPROVED'");
     }
 
+    // Normalizar a mayúsculas
     status = status.toUpperCase();
 
-    // Construir el deep link hacia la app
-    const deepLink = `carlitostravel://pago?status=${status}`;
+    // Crear deep link
+    const deepLink = `carlitostravel://pago?status=${encodeURIComponent(status)}`;
 
-    console.log("➡️ Redirigiendo a:", deepLink);
+    console.log("Deep link generado:", deepLink);
 
-    // Redirigir automáticamente
+    // Intentar redirigir automáticamente
     window.location.href = deepLink;
 </script>
 
-<h2>Procesando pago…</h2>
+<h2>Procesando pago...</h2>
 <p>Si no eres redirigido automáticamente, toca aquí:</p>
 
-<a id="fallbackLink" href="#">Abrir aplicación</a>
+<a id="manualLink" href="#">Abrir App</a>
 
 <script>
-    // Configurar el enlace de fallback
-    document.getElementById("fallbackLink").href = 
-        `carlitostravel://pago?status=${status}`;
+    // Link manual de respaldo
+    document.getElementById("manualLink").href = 
+        `carlitostravel://pago?status=${encodeURIComponent(status)}`;
 </script>
 
 </body>
