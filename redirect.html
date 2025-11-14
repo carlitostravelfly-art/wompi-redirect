@@ -6,39 +6,22 @@
 </head>
 <body>
 <script>
-    // Obtener todos los parámetros recibidos por Wompi
     const urlParams = new URLSearchParams(window.location.search);
 
-    // Intentamos todas las variantes conocidas
     let status =
         urlParams.get("status") ||
         urlParams.get("transactionStatus") ||
         urlParams.get("transaction_status") ||
-        urlParams.get("transaction.status") ||
-        urlParams.get("transaction.statusMessage") ||
-        urlParams.get("event") ||
-        "";
+        "FAILED"; // ⭐ Si Wompi no envía nada → es fallo
 
-    console.log("Status recibido crudo:", status);
+    console.log("Status recibido:", status);
 
-    if (status) {
-        status = status.trim().toUpperCase();
-    }
+    status = status.toUpperCase();
 
-    // ⚠️ IMPORTANTE
-    // Si Wompi no envía status, NO asumir APPROVED.
-    if (!status) {
-        status = "NO_STATUS_RECEIVED";
-        console.log("Status vacío → usando NO_STATUS_RECEIVED");
-    }
-
-    console.log("Status final:", status);
-
-    // Construir deep link
     const deepLink = `carlitostravel://pago?status=${encodeURIComponent(status)}`;
+
     console.log("Deep link generado:", deepLink);
 
-    // Redirigir a la app
     window.location.href = deepLink;
 </script>
 
@@ -48,8 +31,7 @@
 <a id="manualLink" href="#">Abrir App</a>
 
 <script>
-    // Link manual
-    document.getElementById("manualLink").href =
+    document.getElementById("manualLink").href = 
         `carlitostravel://pago?status=${encodeURIComponent(status)}`;
 </script>
 
