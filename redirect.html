@@ -6,14 +6,17 @@
 </head>
 <body>
 <script>
-    // Captura todos los parámetros de Wompi
-    const params = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search);
 
-    // Obtiene status
-    const status = params.get("status") || "UNKNOWN";
+    // Wompi envía status en diferentes parámetros:
+    const status =
+        urlParams.get("status") ||
+        urlParams.get("transactionStatus") ||
+        urlParams.get("transaction_status") ||
+        ""; // si viene vacío lo tratamos como aprobado
 
-    // Construye el deep link
-    const deepLink = `carlitostravel://pago?status=${status}`;
+    // Construye el deep link hacia tu app
+    const deepLink = `carlitostravel://pago${status ? `?status=${status}` : ""}`;
 
     // Redirige automáticamente
     window.location.href = deepLink;
@@ -24,7 +27,14 @@
 <a id="link" href="#">Abrir app</a>
 
 <script>
-    document.getElementById("link").href = `carlitostravel://pago?status=${status}`;
+    const urlParams2 = new URLSearchParams(window.location.search);
+    const st =
+        urlParams2.get("status") ||
+        urlParams2.get("transactionStatus") ||
+        urlParams2.get("transaction_status") ||
+        "";
+
+    document.getElementById("link").href = `carlitostravel://pago${st ? `?status=${st}` : ""}`;
 </script>
 </body>
 </html>
