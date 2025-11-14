@@ -5,38 +5,53 @@
     <title>Redirigiendo…</title>
 </head>
 <body>
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-
-    let status =
-        urlParams.get("status") ||
-        urlParams.get("transactionStatus") ||
-        urlParams.get("transaction_status");
-
-    // 🚨 Nunca enviar deep link vacío
-    if (!status) status = "FAILED";
-
-    const deepLink = `carlitostravel://pago?status=${status}`;
-
-    console.log("🔗 Redirigiendo a:", deepLink);
-
-    window.location.href = deepLink;
-</script>
-
 <h2>Procesando pago...</h2>
 <p>Si no eres redirigido automáticamente, toca aquí:</p>
 <a id="link" href="#">Abrir app</a>
 
+<pre id="debug" style="padding:20px; background:#eee; margin-top:20px;"></pre>
+
 <script>
-    const params2 = new URLSearchParams(window.location.search);
-    let st =
-        params2.get("status") ||
-        params2.get("transactionStatus") ||
-        params2.get("transaction_status");
+    const debugBox = document.getElementById("debug");
 
-    if (!st) st = "FAILED";
+    // URL completa recibida
+    const fullUrl = window.location.href;
 
-    document.getElementById("link").href = `carlitostravel://pago?status=${st}`;
+    const params = new URLSearchParams(window.location.search);
+
+    let status =
+        params.get("status") ||
+        params.get("transactionStatus") ||
+        params.get("transaction_status");
+
+    // Si no llega → marcar FAILED (temporal)
+    if (!status) status = "NO_STATUS_RECEIVED";
+
+    const deepLink = `carlitostravel://pago?status=${status}`;
+
+    // Mostrar debug
+    debugBox.innerText =
+`URL recibida:
+${fullUrl}
+
+Parámetros detectados:
+status: ${params.get("status")}
+transactionStatus: ${params.get("transactionStatus")}
+transaction_status: ${params.get("transaction_status")}
+
+Status resultante:
+${status}
+
+Deep link generado:
+${deepLink}
+`;
+
+    // Redirección automática
+    window.location.href = deepLink;
+
+    // Botón manual
+    document.getElementById("link").href = deepLink;
 </script>
+
 </body>
 </html>
