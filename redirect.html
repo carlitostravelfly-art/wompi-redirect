@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
-<title>Wompi Redirect</title>
-<script>
-  window.onload = function () {
-    const params = new URLSearchParams(window.location.search);
-    const status = params.get('status') || '';
-    const transactionId = params.get('id') || '';
-    const deeplink = `carlitostravel://pago?status=${status}&id=${transactionId}`;
-    window.location.href = deeplink;
-  };
-</script>
+    <meta charset="UTF-8">
+    <title>Redirigiendo…</title>
 </head>
 <body>
-  <p>Procesando pago...</p>
+<script>
+    // Captura todos los parámetros de Wompi
+    const params = new URLSearchParams(window.location.search);
+
+    // Obtiene status
+    const status = params.get("status") || "UNKNOWN";
+
+    // Construye el deep link
+    const deepLink = `carlitostravel://pago?status=${status}`;
+
+    // Redirige automáticamente
+    window.location.href = deepLink;
+</script>
+
+<h2>Procesando pago...</h2>
+<p>Si no eres redirigido automáticamente, toca aquí:</p>
+<a id="link" href="#">Abrir app</a>
+
+<script>
+    document.getElementById("link").href = `carlitostravel://pago?status=${status}`;
+</script>
 </body>
 </html>
